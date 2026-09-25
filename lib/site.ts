@@ -177,7 +177,7 @@ function merge(base: Site, c: Record<string, unknown>): Site {
   };
 }
 
-const CRM_URL = (process.env.IMW_CRM_URL || "https://clients.insightmeridiangroup.com").replace(/\/$/, "");
+const CRM_URL = (process.env.IMW_CRM_URL || "https://portal.insightmeridiangroup.com").replace(/\/$/, "");
 const SITE_ID = process.env.IMW_SITE_ID || "";
 
 /** The website's content: CRM content if available, otherwise the fall-back. Refreshes every 60 seconds. */

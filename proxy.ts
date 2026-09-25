@@ -12,7 +12,7 @@
  */
 import { NextResponse, type NextRequest } from "next/server";
 
-const CRM_URL = process.env.IMW_CRM_URL || "https://clients.insightmeridiangroup.com";
+const CRM_URL = process.env.IMW_CRM_URL || "https://portal.insightmeridiangroup.com";
 
 export async function proxy(req: NextRequest) {
   const host = (req.headers.get("host") || "").split(":")[0];
