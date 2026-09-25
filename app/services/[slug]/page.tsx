@@ -1,20 +1,25 @@
+/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Check, CtaBand, PageHero } from "@/components/Layout";
-import { site } from "@/lib/site";
+import { getSite } from "@/lib/site";
 
-export const dynamicParams = false;
-export const generateStaticParams = () => site.services.map((s) => ({ slug: s.slug }));
+export const dynamicParams = true; // services added later in the CRM work straight away
+export const revalidate = 60;
+export async function generateStaticParams() {
+  return (await getSite()).services.map((s) => ({ slug: s.slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const s = site.services.find((x) => x.slug === slug);
+  const s = (await getSite()).services.find((x) => x.slug === slug);
   return s ? { title: s.title, description: s.summary } : {};
 }
 
 export default async function ServicePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const site = await getSite();
   const s = site.services.find((x) => x.slug === slug);
   if (!s) notFound();
   const others = site.services.filter((x) => x.slug !== slug);
@@ -24,6 +29,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
       <section className="section">
         <div className="wrap split">
           <div className="prose">
+            {s.image && <img className="service-img" src={s.image} alt="" />}
             {s.details.map((p, i) => (
               <p key={i}>{p}</p>
             ))}
@@ -60,7 +66,7 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
       )}
-      <CtaBand />
+      <CtaBand site={site} />
     </>
   );
 }

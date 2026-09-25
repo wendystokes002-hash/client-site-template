@@ -19,7 +19,12 @@ Client → **Website setup → Create website** → check the details → **Open
 → click **Deploy** in Vercel. About a minute later the site is live at `name.vercel.app`.
 Paste that address back into the CRM.
 
-## Customising a client's site afterwards
+## Editing a client's website (no code)
+Client Manager → client → **Website content** tab → change text, services, photos, logo,
+reviews, FAQ, style, Google Analytics ID → **Save & publish**. The site updates within a minute.
+(The site reads its content from the CRM using `IMW_SITE_ID`, filled in automatically.)
+
+## Customising a client's site with code (optional)
 - **All text (services, about, FAQ, reviews, team):** edit `lib/site.ts` in the client's own repo (the copy Vercel made),
   or change the values in Vercel → project → Settings → Environment Variables, then Redeploy.
 - **Images/logo:** add them to `public/` and reference them in `app/page.tsx`.

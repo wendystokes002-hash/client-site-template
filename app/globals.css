@@ -253,3 +253,14 @@ a:focus-visible, .btn:focus-visible, summary:focus-visible { outline: 3px solid 
   .cta-in .actions { width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn, .card { transition: none; } }
+
+/* ---------- Images (uploaded in the CRM) ---------- */
+.logo { height: 2.6rem; width: auto; max-width: 9rem; object-fit: contain; flex: none; }
+.hero-media img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius); box-shadow: 0 30px 60px -35px rgba(15, 23, 42, 0.55); }
+[data-style="classic"] .hero-media { width: 100%; max-width: 56rem; }
+[data-style="classic"] .hero-media img { aspect-ratio: 21 / 9; }
+[data-style="bold"] .hero-media img { border: 3px solid var(--ink); box-shadow: 12px 12px 0 var(--ink); }
+.card-img { display: block; width: calc(100% + 3.4rem); max-width: none; margin: -1.7rem -1.7rem 1rem; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius) var(--radius) 0 0; }
+.service-img, .about-img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: var(--radius); margin: 0 0 1.5rem; }
+.about-img { margin-top: 1.5rem; }
+img.avatar { object-fit: cover; padding: 0; }

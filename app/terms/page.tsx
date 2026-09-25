@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/Layout";
-import { site } from "@/lib/site";
+import { getSite } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Terms of Use" };
 
-export default function Terms() {
+export default async function Terms() {
+  const site = await getSite();
   return (
     <>
       <PageHero title="Terms of Use" />

@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import ContactForm from "@/components/ContactForm";
 import { PageHero } from "@/components/Layout";
-import { site, tel } from "@/lib/site";
+import { getSite, telOf } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Contact", description: `Contact ${site.name}${site.phone ? ` on ${site.phone}` : ""}.` };
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSite();
+  return { title: "Contact", description: `Contact ${site.name}${site.phone ? ` on ${site.phone}` : ""}.` };
+}
 
-export default function Contact() {
+export default async function Contact() {
+  const site = await getSite();
+  const tel = telOf(site.phone);
   const canForm = !!(site.formEndpoint || site.email);
   return (
     <>
@@ -14,7 +19,7 @@ export default function Contact() {
         <div className="wrap contact-grid">
           <div>
             {canForm ? (
-              <ContactForm />
+              <ContactForm to={site.email} endpoint={site.formEndpoint} />
             ) : (
               <p className="lead">Call us or visit — we’d love to hear from you.</p>
             )}

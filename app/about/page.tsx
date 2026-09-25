@@ -1,10 +1,15 @@
+/* eslint-disable @next/next/no-img-element */
 import type { Metadata } from "next";
 import { CtaBand, PageHero } from "@/components/Layout";
-import { initials, site } from "@/lib/site";
+import { getSite, initials } from "@/lib/site";
 
-export const metadata: Metadata = { title: "About us", description: site.about.story[0] };
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSite();
+  return { title: "About us", description: site.about.story[0] };
+}
 
-export default function About() {
+export default async function About() {
+  const site = await getSite();
   return (
     <>
       <PageHero eyebrow="About us" title={`About ${site.name}`} text={site.tagline} />
@@ -13,6 +18,7 @@ export default function About() {
           <div>
             <p className="eyebrow">Our story</p>
             <h2>Who we are</h2>
+            {site.aboutImage && <img className="about-img" src={site.aboutImage} alt="" />}
           </div>
           <div className="prose">
             {site.about.story.map((p, i) => (
@@ -44,7 +50,7 @@ export default function About() {
             <div className="grid">
               {site.about.team.map((t) => (
                 <article key={t.name} className="person">
-                  <span className="avatar">{initials(t.name)}</span>
+                  {t.photo ? <img className="avatar" src={t.photo} alt={t.name} /> : <span className="avatar">{initials(t.name)}</span>}
                   <h3>{t.name}</h3>
                   <p>{t.role}</p>
                 </article>
@@ -53,7 +59,7 @@ export default function About() {
           </div>
         </section>
       )}
-      <CtaBand />
+      <CtaBand site={site} />
     </>
   );
 }

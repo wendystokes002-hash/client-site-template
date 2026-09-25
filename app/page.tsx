@@ -1,8 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 import { CtaBand } from "@/components/Layout";
-import { site, tel } from "@/lib/site";
+import { getSite, telOf } from "@/lib/site";
 
-export default function Home() {
+export default async function Home() {
+  const site = await getSite();
+  const tel = telOf(site.phone);
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -37,14 +40,20 @@ export default function Home() {
               )}
             </div>
           </div>
-          <div className="hero-card" aria-hidden="true">
-            <p className="hero-card-h">What we do</p>
-            <ul>
-              {site.services.slice(0, 5).map((s) => (
-                <li key={s.slug}>{s.title}</li>
-              ))}
-            </ul>
-          </div>
+          {site.heroImage ? (
+            <div className="hero-media">
+              <img src={site.heroImage} alt="" />
+            </div>
+          ) : (
+            <div className="hero-card" aria-hidden="true">
+              <p className="hero-card-h">What we do</p>
+              <ul>
+                {site.services.slice(0, 5).map((s) => (
+                  <li key={s.slug}>{s.title}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </section>
 
@@ -62,6 +71,7 @@ export default function Home() {
           <div className="grid">
             {site.services.map((s, i) => (
               <Link key={s.slug} href={`/services/${s.slug}`} className="card">
+                {s.image && <img className="card-img" src={s.image} alt="" loading="lazy" />}
                 <span className="card-num">{String(i + 1).padStart(2, "0")}</span>
                 <h3>{s.title}</h3>
                 <p>{s.summary}</p>
@@ -95,7 +105,7 @@ export default function Home() {
             <h2>What our customers say</h2>
             <div className="grid">
               {site.testimonials.map((t) => (
-                <figure key={t.name} className="quote">
+                <figure key={t.name + t.quote.slice(0, 10)} className="quote">
                   <blockquote>“{t.quote}”</blockquote>
                   <figcaption>
                     {t.name}
@@ -123,8 +133,8 @@ export default function Home() {
         </div>
       </section>
 
-      <CtaBand />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <CtaBand site={site} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     </>
   );
 }

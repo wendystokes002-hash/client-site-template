@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/Layout";
-import { site } from "@/lib/site";
+import { getSite } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Privacy Policy" };
 
-export default function Privacy() {
+export default async function Privacy() {
+  const site = await getSite();
   return (
     <>
       <PageHero title="Privacy Policy" />

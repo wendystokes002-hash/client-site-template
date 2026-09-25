@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { site } from "@/lib/site";
 
-export default function ContactForm() {
+export default function ContactForm({ to, endpoint }: { to: string; endpoint: string }) {
   const [state, setState] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const submit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,10 +14,10 @@ export default function ContactForm() {
     const phone = String(f.get("phone") || "");
     const message = String(f.get("message") || "");
 
-    if (site.formEndpoint) {
+    if (endpoint) {
       setState("sending");
       try {
-        const r = await fetch(site.formEndpoint, {
+        const r = await fetch(endpoint, {
           method: "POST",
           headers: { Accept: "application/json", "Content-Type": "application/json" },
           body: JSON.stringify({ name, email, phone, message }),
@@ -32,7 +31,7 @@ export default function ContactForm() {
     }
     // No form service set up: open the visitor's email app with the message filled in.
     const body = `${message}\n\n— ${name}\n${email}${phone ? "\n" + phone : ""}`;
-    window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(`Website enquiry from ${name}`)}&body=${encodeURIComponent(body)}`;
+    window.location.href = `mailto:${to}?subject=${encodeURIComponent(`Website enquiry from ${name}`)}&body=${encodeURIComponent(body)}`;
     setState("sent");
   };
 
@@ -40,7 +39,7 @@ export default function ContactForm() {
     return (
       <div className="form-done" role="status">
         <h3>Thank you!</h3>
-        <p>{site.formEndpoint ? "Your message has been sent. We’ll get back to you soon." : "Your email app should now be open with your message — just press Send."}</p>
+        <p>{endpoint ? "Your message has been sent. We’ll get back to you soon." : "Your email app should now be open with your message — just press Send."}</p>
       </div>
     );
 

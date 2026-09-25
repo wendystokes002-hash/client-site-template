@@ -1,16 +1,24 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
-import { initials, nav, site, tel } from "@/lib/site";
+import { initials, navItems, telOf, type Site } from "@/lib/site";
 
-export function Header() {
+function Brand({ site }: { site: Site }) {
+  return (
+    <Link href="/" className="brand" aria-label={`${site.name} home`}>
+      {site.logo ? <img src={site.logo} alt="" className="logo" /> : <span className="mark">{initials(site.name)}</span>}
+      <span className="brand-name">{site.name}</span>
+    </Link>
+  );
+}
+
+export function Header({ site }: { site: Site }) {
+  const tel = telOf(site.phone);
   return (
     <header className="header">
       <div className="wrap header-in">
-        <Link href="/" className="brand" aria-label={`${site.name} home`}>
-          <span className="mark">{initials(site.name)}</span>
-          <span className="brand-name">{site.name}</span>
-        </Link>
+        <Brand site={site} />
         <nav className="nav" aria-label="Main">
-          {nav.slice(1).map((n) => (
+          {navItems.slice(1).map((n) => (
             <Link key={n.href} href={n.href}>
               {n.label}
             </Link>
@@ -26,7 +34,7 @@ export function Header() {
             <span />
           </summary>
           <div className="menu-panel">
-            {nav.map((n) => (
+            {navItems.map((n) => (
               <Link key={n.href} href={n.href}>
                 {n.label}
               </Link>
@@ -43,7 +51,8 @@ export function Header() {
   );
 }
 
-export function Footer() {
+export function Footer({ site }: { site: Site }) {
+  const tel = telOf(site.phone);
   return (
     <footer className="footer">
       <div className="wrap footer-grid">
@@ -53,7 +62,7 @@ export function Footer() {
         </div>
         <div>
           <p className="footer-h">Pages</p>
-          {nav.map((n) => (
+          {navItems.map((n) => (
             <Link key={n.href} href={n.href}>
               {n.label}
             </Link>
@@ -103,7 +112,8 @@ export function PageHero({ eyebrow, title, text }: { eyebrow?: string; title: st
   );
 }
 
-export function CtaBand({ title = "Ready to get started?", text = "Tell us what you need and we’ll get back to you quickly." }: { title?: string; text?: string }) {
+export function CtaBand({ site, title = "Ready to get started?", text = "Tell us what you need and we’ll get back to you quickly." }: { site: Site; title?: string; text?: string }) {
+  const tel = telOf(site.phone);
   return (
     <section className="cta">
       <div className="wrap cta-in">

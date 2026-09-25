@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { CtaBand, PageHero } from "@/components/Layout";
-import { site } from "@/lib/site";
+import { getSite } from "@/lib/site";
 
-export const metadata: Metadata = { title: "FAQ", description: `Answers to common questions about ${site.name}.` };
+export async function generateMetadata(): Promise<Metadata> {
+  return { title: "FAQ", description: `Answers to common questions about ${(await getSite()).name}.` };
+}
 
-export default function Faq() {
+export default async function Faq() {
+  const site = await getSite();
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -23,8 +26,8 @@ export default function Faq() {
           ))}
         </div>
       </section>
-      <CtaBand title="Still have a question?" />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <CtaBand site={site} title="Still have a question?" />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
     </>
   );
 }
