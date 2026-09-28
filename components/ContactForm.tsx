@@ -63,7 +63,7 @@ export default function ContactForm({ to, endpoint }: { to: string; endpoint: st
         <span>How can we help? *</span>
         <textarea name="message" rows={5} required />
       </label>
-      <input name="company_website" tabIndex={-1} autoComplete="off" className="hp" aria-hidden="true" />
+      <input name="company_website" aria-label="Leave this field empty" tabIndex={-1} autoComplete="off" className="hp" aria-hidden="true" />
       {state === "error" && <p className="form-error">Sorry, something went wrong. Please email or call us instead.</p>}
       <button className="btn" disabled={state === "sending"}>
         {state === "sending" ? "Sending…" : "Send message"}
